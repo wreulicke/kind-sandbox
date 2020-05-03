@@ -1,0 +1,7 @@
+apiVersion: wreulicke.github.io/v1alpha1
+kind: Sample
+metadata:
+  name: sample-sample2
+spec:
+  # Add fields here
+  deployment_name: baz

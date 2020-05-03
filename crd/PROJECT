@@ -1,0 +1,7 @@
+domain: my.domain
+repo: crd
+resources:
+- group: sample
+  kind: Sample
+  version: v1alpha1
+version: "2"
