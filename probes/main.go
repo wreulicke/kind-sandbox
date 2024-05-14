@@ -17,24 +17,31 @@ func newServer() *http.Server {
 		Handler: mux,
 	}
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.Write([]byte("Hello, World!"))
 	})
 	mux.HandleFunc("/probes/liveness", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.Write([]byte("OK"))
 	})
 	mux.HandleFunc("/probes/liveness/fail", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
 	})
 	mux.HandleFunc("/probes/readiness", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.Write([]byte("OK"))
 	})
 	mux.HandleFunc("/probes/readiness/fail", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
 	})
 	mux.HandleFunc("/probes/startup", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.Write([]byte("OK"))
 	})
 	mux.HandleFunc("/probes/startup/fail", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
 	})
 	return s

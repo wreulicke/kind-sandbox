@@ -19,7 +19,7 @@ spec:
         image: localhost:5001/wreulicke/probes-tests
         startupProbe:
           httpGet:
-            path: /probes/startup
+            path: /probes/startup/fail
             port: 8080
         readinessProbe:
           httpGet:
@@ -27,7 +27,7 @@ spec:
             port: 8080
         livenessProbe:
           httpGet:
-            path: /probes/liveness/fail
+            path: /probes/liveness
             port: 8080
         ports:
         - containerPort: 8080
