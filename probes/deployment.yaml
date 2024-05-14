@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+  labels:
+    app: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: localhost:5001/wreulicke/probes-tests
+        startupProbe:
+          httpGet:
+            path: /probes/startup
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /probes/readiness
+            port: 8080
+        livenessProbe:
+          httpGet:
+            path: /probes/liveness/fail
+            port: 8080
+        ports:
+        - containerPort: 8080
