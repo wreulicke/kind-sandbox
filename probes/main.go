@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,9 +12,10 @@ import (
 )
 
 func newServer() *http.Server {
+	port := os.Getenv("PORT")
 	mux := http.NewServeMux()
 	s := &http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf(":%s", port),
 		Handler: mux,
 	}
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
