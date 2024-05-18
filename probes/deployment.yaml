@@ -18,6 +18,12 @@ spec:
       - name: server
         image: localhost:5001/wreulicke/probes-tests
         startupProbe:
+          # exec:
+          #   command:
+          #   - sh
+          #   - -c
+          #   - "exec sleep 10"
+          # failureThreshold: 100
           httpGet:
             path: /probes/startup
             port: 8080
