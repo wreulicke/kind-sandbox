@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 )
@@ -38,6 +39,35 @@ func newServer() *http.Server {
 		log.Println(r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
 	})
+	var probeCount int32 = 0
+	var lock sync.Mutex
+	incrementProbe := func() int32 {
+		lock.Lock()
+		defer lock.Unlock()
+		if probeCount == 8 {
+			probeCount = 0
+		} else {
+			probeCount++
+		}
+		return probeCount
+	}
+	mux.HandleFunc("/probes/readiness/count", func(w http.ResponseWriter, r *http.Request) {
+		count := incrementProbe()
+		log.Println(r.URL.Path, count)
+		switch count / 4 {
+		case 1:
+			log.Println("DOWN")
+			w.WriteHeader(http.StatusInternalServerError)
+		default:
+			log.Println("OK")
+			w.Write([]byte("OK"))
+		}
+	})
+	mux.HandleFunc("/probes/readiness/slow", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
+		time.Sleep(3 * time.Second)
+		w.Write([]byte("OK"))
+	})
 	mux.HandleFunc("/probes/startup", func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path)
 		w.Write([]byte("OK"))
@@ -45,6 +75,11 @@ func newServer() *http.Server {
 	mux.HandleFunc("/probes/startup/fail", func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
+	})
+	mux.HandleFunc("/probes/startup/slow", func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
+		time.Sleep(5 * time.Second)
+		w.Write([]byte("OK"))
 	})
 	return s
 }

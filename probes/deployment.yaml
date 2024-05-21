@@ -27,6 +27,10 @@ spec:
           httpGet:
             path: /probes/startup
             port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+          periodSeconds: 20
         readinessProbe:
           httpGet:
             path: /probes/readiness
@@ -40,22 +44,22 @@ spec:
           value: "8080"
         ports:
         - containerPort: 8080
-      - name: server2
-        image: localhost:5001/wreulicke/probes-tests
-        startupProbe:
-          httpGet:
-            path: /probes/startup
-            port: 8081
-        readinessProbe:
-          httpGet:
-            path: /probes/readiness/fail
-            port: 8081
-        livenessProbe:
-          httpGet:
-            path: /probes/liveness
-            port: 8081
-        env:
-        - name: PORT
-          value: "8081"
-        ports:
-        - containerPort: 8081
+      # - name: server2
+      #   image: localhost:5001/wreulicke/probes-tests
+      #   startupProbe:
+      #     httpGet:
+      #       path: /probes/startup
+      #       port: 8081
+      #   readinessProbe:
+      #     httpGet:
+      #       path: /probes/readiness/fail
+      #       port: 8081
+      #   livenessProbe:
+      #     httpGet:
+      #       path: /probes/liveness
+      #       port: 8081
+      #   env:
+      #   - name: PORT
+      #     value: "8081"
+      #   ports:
+      #   - containerPort: 8081
